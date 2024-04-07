@@ -319,14 +319,14 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
 
     colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
     colors[ImGuiCol_TextDisabled]           = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
-    colors[ImGuiCol_WindowBg]               = ImVec4(0.19f, 0.33f, 0.44f, 1.00f);
+    colors[ImGuiCol_WindowBg]               = ImVec4(0.15f, 0.25f, 0.35f, 1.00f);
     colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     colors[ImGuiCol_PopupBg]                = ImVec4(1.00f, 1.00f, 1.00f, 0.98f);
     colors[ImGuiCol_Border]                 = ImVec4(0.0f, 0.0f, 0.0f, 1.f);
     colors[ImGuiCol_BorderShadow]           = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     colors[ImGuiCol_FrameBg]                = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
-    colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.26f, 0.59f, 0.98f, 0.40f);
-    colors[ImGuiCol_FrameBgActive]          = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+    colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.2f, 0.5f, 0.9f, 0.40f);
+    colors[ImGuiCol_FrameBgActive]          = ImVec4(0.2f, 0.5f, 0.9f, 0.67f);
     colors[ImGuiCol_TitleBg]                = ImVec4(0.37f, 0.62f, 0.66f, 1.f); 
     colors[ImGuiCol_TitleBgActive]          = ImVec4(0.01f, 0.01f, 0.01f, 1.f);
     colors[ImGuiCol_TitleBgCollapsed]       = ImVec4(1.00f, 1.00f, 1.00f, 0.51f);

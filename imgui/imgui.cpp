@@ -1002,7 +1002,7 @@ static void*                GImAllocatorUserData = NULL;
 ImGuiStyle::ImGuiStyle()
 {
     Alpha                   = 1.0f;             // Global alpha applies to everything in ImGui
-    WindowPadding           = ImVec2(8,8);      // Padding within a window
+    WindowPadding           = ImVec2(12, 12);      // Padding within a window
     WindowRounding          = 0.0f;             // Radius of window corners rounding. Set to 0.0f to have rectangular windows. Large values tend to lead to variety of artifacts and are not recommended.
     WindowBorderSize        = 1.0f;             // Thickness of border around windows. Generally set to 0.0f or 1.0f. Other values not well tested.
     WindowMinSize           = ImVec2(32,32);    // Minimum window size

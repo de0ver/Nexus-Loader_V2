@@ -3,16 +3,16 @@
 
 namespace Functions
 {
-	bool DoesFileExist(const char* name) {
-		if (FILE* file = fopen(name, "r")) {
+	bool DoesFileExist(const char* name)
+	{
+		if (FILE* file = fopen(name, "r"))
+		{
 			fclose(file);
 			return true;
 		}
 
 		return false;
 	}
-
-	//===========================================================================================
 
 	DWORD GetProcessId(const char* ProcessName)
 	{
@@ -40,12 +40,15 @@ namespace Functions
 
 	uintptr_t GetModuleBaseAddress(DWORD pid, const char* modName) {
 		HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
-		if (hSnap != INVALID_HANDLE_VALUE) {
+		if (hSnap != INVALID_HANDLE_VALUE)
+		{
 			MODULEENTRY32 modEntry;
 			modEntry.dwSize = sizeof(modEntry);
-			if (Module32First(hSnap, &modEntry)) {
+			if (Module32First(hSnap, &modEntry))
+			{
 				do {
-					if (!strcmp(modEntry.szModule, modName)) {
+					if (!strcmp(modEntry.szModule, modName))
+					{
 						CloseHandle(hSnap);
 						return (uintptr_t)modEntry.modBaseAddr;
 					}
@@ -53,8 +56,6 @@ namespace Functions
 			}
 		}
 	}
-
-	//===========================================================================================
 
 	bool LoadLibraryInject(DWORD ProcessId, const char* Dll)
 	{
@@ -78,30 +79,14 @@ namespace Functions
 		return TRUE;
 	}
 
-	//===========================================================================================
-
 	namespace Internal
 	{
 		LPVOID NTOpenFile = GetProcAddress(LoadLibraryW(L"ntdll"), "NtOpenFile");
 
-		bool ExecuteBypass(HANDLE hProcess)
-		{
-			if (NTOpenFile) {
-				char originalBytes[5];
-				memcpy(originalBytes, NTOpenFile, 5);
-				if (WriteProcessMemory(hProcess, NTOpenFile, originalBytes, 5, NULL)) {
-					return TRUE;
-				}
-
-			}
-
-			return FALSE;
-
-		}
-
 		bool Backup(HANDLE hProcess)
 		{
-			if (NTOpenFile) {
+			if (NTOpenFile)
+			{
 				//So, when I patching first 5 bytes I need to backup them to 0? (I think)
 				char Orig[5];
 				memcpy(Orig, NTOpenFile, 5);

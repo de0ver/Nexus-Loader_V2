@@ -710,29 +710,30 @@ bool ImGui::ButtonEx(const char* label, const ImVec2& size_arg, ImGuiButtonFlags
     // Render  
     ImU32 inside_col[4] = { ImColor(72, 154, 222, 255)/*topleft*/,
                             ImColor(72, 154, 222, 255)/*topright*/,
-                            ImColor(104, 210, 243, 255)/*botright*/,
-                            ImColor(104, 210, 243, 255)/*botleft*/ };
+                            ImColor(84, 190, 223, 255)/*botright*/,
+                            ImColor(84, 190, 223, 255)/*botleft*/ };
 
-    const ImU32 outside_solid_col = ImColor(30, 30, 30, 255);
+    ImU32 outside_solid_col = ImColor(30, 30, 30, 255);
 
     if (held)
     {
         inside_col[0] = ImColor(32, 114, 202, 255); //я хотел массивом как сверху обозначить, а оно не дает
         inside_col[1] = ImColor(32, 114, 202, 255);
-        inside_col[2] = ImColor(64, 170, 203, 255);
-        inside_col[3] = ImColor(64, 170, 203, 255);
+        inside_col[2] = ImColor(32, 114, 202, 255);
+        inside_col[3] = ImColor(32, 114, 202, 255);
+        outside_solid_col = ImColor(200, 200, 200, 255);
     }
     else if (hovered)
     {
         inside_col[0] = ImColor(52, 134, 202, 255);
         inside_col[1] = ImColor(52, 134, 202, 255);
-        inside_col[2] = ImColor(84, 190, 223, 255);
-        inside_col[3] = ImColor(84, 190, 223, 255);
+        inside_col[2] = ImColor(52, 134, 202, 255);
+        inside_col[3] = ImColor(52, 134, 202, 255);
+        outside_solid_col = ImColor(200, 200, 200, 255);
     }
 
-
-    draw->AddRectFilledMultiColorRounded(bb.Min, bb.Max, GetColorU32(ImGuiCol_WindowBg), inside_col[0], inside_col[1], inside_col[2], inside_col[3], 6, ImDrawCornerFlags_All);
-    draw->AddRect(bb.Min, bb.Max, outside_solid_col, 5);
+    draw->AddRectFilledMultiColorRounded(bb.Min, bb.Max, GetColorU32(ImGuiCol_WindowBg), inside_col[0], inside_col[1], inside_col[2], inside_col[3], 7, ImDrawCornerFlags_All);
+    draw->AddRect(bb.Min, bb.Max, outside_solid_col, 6, 0, 2.f);
 
     if (g.LogEnabled)
         LogSetNextTextDecoration("[", "]");

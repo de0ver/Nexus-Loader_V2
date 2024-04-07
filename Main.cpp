@@ -5,54 +5,89 @@
 #include "globals.hh"
 #include <iostream>
 #include <windows.h>
-#include <conio.h>
 #include <TlHelp32.h>
 #include <functions.h>
 #include <urlmon.h>
-#include <tchar.h>
-#include <fstream>
-#include <string>
-#include <filesystem>
-#include <intrin.h>
-#include <shlobj.h>
-#include <cstdlib>
 #include <vector>
+#include <thread>
 
-void Inject() {
+void Inject()
+{
+    //URLDownloadToFileA(NULL, "https://cdn.discordapp.com/attachments/1105538943388229682/1216439953907777546/account_error_bypass.dll?ex=660064fd&is=65edeffd&hm=893c79757a1868da57d95fb15f9ad0aa0779645e69f51f13f1262ee62ccaf373&", (globals.appdata_gor + globals.error_bypass).c_str(), 0, NULL);
+
     DWORD Process = Functions::GetProcessId("csgo.exe");
-    if (!Process) {
+
+    if (!Process)
+    {
         MessageBoxA(nullptr, "Open CS:GO and press OK!", "Nexus-Loader", MB_ICONINFORMATION);
         Process = Functions::GetProcessId("csgo.exe");
     }
-        HANDLE Game = OpenProcess(PROCESS_ALL_ACCESS, FALSE, Process);
-        uintptr_t ModuleBase = Functions::GetModuleBaseAddress(Process, "client.dll");
 
-    if (Process) {
-        if (Functions::LoadLibraryInject(Process, globals.appdata.c_str())) {
-            Functions::Internal::Backup(Game);
-            MessageBoxA(nullptr, "Injected!", "Nexus-Loader", MB_ICONINFORMATION);
-            ExitProcess(0);
-        }
-        else {
-            Functions::Internal::Backup(Game);
-            MessageBoxA(nullptr, "Inject failed!", "Nexus-Loader", MB_ICONINFORMATION);
-        }
-    }
-    else {
-        MessageBoxA(nullptr, "Process not founded!", "Nexus-Loader", MB_ICONINFORMATION);
-        exit(-1);
+    HANDLE Game = OpenProcess(PROCESS_ALL_ACCESS, FALSE, Process);
+    uintptr_t ModuleBase = Functions::GetModuleBaseAddress(Process, "client.dll");
+
+    if (Process)
+    {
+        //if (Functions::LoadLibraryInject(Process, (globals.appdata_gor + globals.error_bypass).c_str()))
+        //{
+            //std::this_thread::sleep_for(std::chrono::seconds(2));
+            if (Functions::LoadLibraryInject(Process, (globals.appdata).c_str()))
+            {
+                //remove((globals.appdata_gor + globals.error_bypass).c_str());
+                Functions::Internal::Backup(Game);
+                MessageBoxA(nullptr, "Injected!", globals.message_title, MB_ICONINFORMATION);
+                ExitProcess(0);
+            }
+            else {
+                //remove((globals.appdata_gor + globals.error_bypass).c_str());
+                Functions::Internal::Backup(Game);
+                MessageBoxA(nullptr, "Inject failed!", globals.message_title, MB_ICONINFORMATION);
+                PlaySoundA("error.wav", NULL, SND_ASYNC);
+                ExitProcess(0);
+            }
+        //}
+    } else {
+        //remove((globals.appdata_gor + globals.error_bypass).c_str());
+        PlaySoundA("error.wav", NULL, SND_ASYNC);
+        MessageBoxA(nullptr, "Process not founded!", globals.message_title, MB_ICONINFORMATION);
+        return;
     }
 }
 
-void ChooseDll() {
-    
-    if (globals.get_number > 0) {
-        if (!Functions::DoesFileExist(globals.appdata.c_str())) {
-            globals.hr = URLDownloadToFile(NULL, (globals.github + globals.link).c_str(), globals.appdata.c_str(), 0, 0);
-        }
-        else
+void ChooseDll()
+{
+    if (globals.get_number > 0)
+    {
+        if (!Functions::DoesFileExist(globals.appdata.c_str()))
         {
-            Inject();
+            globals.hr = URLDownloadToFileA(NULL, (globals.github + globals.link).c_str(), globals.appdata.c_str(), 0, 0);
+        } else {
+            if (globals.get_number == 6 || globals.get_number == 13)
+            {
+                char steam_path[255];
+                DWORD BufferSize = 8192;
+                RegGetValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\Valve\\Steam", "InstallPath", RRF_RT_ANY, NULL, (PVOID)&steam_path, &BufferSize);
+                MessageBoxA(nullptr, "Steam will be closed and opened again", globals.message_title, MB_ICONINFORMATION);
+                system("taskkill /f /im steam.exe");
+                std::string steam(steam_path); //создание новой строки из char
+                std::string prepare_command = "cd " + (steam) + "&&" + " start steam.exe";
+                const char* full_command = prepare_command.data();
+                system(full_command);
+                URLDownloadToFileA(NULL, "https://cdn.discordapp.com/attachments/1210912374073196614/1216415771178303548/GameOverlayRenderer.dll?ex=66004e77&is=65edd977&hm=4e82d08010d73d9f295668ff085fc453d07cac0405cb1b381ad896c5f674f5de&", (globals.appdata_gor + globals.gameoverlay).c_str(), 0, NULL);
+                MessageBoxA(nullptr, "After Steam full launch press OK", globals.message_title, MB_ICONINFORMATION);             
+                remove((steam + globals.gameoverlay).c_str());
+                if (rename((globals.appdata_gor + globals.gameoverlay).c_str(), (steam + globals.gameoverlay).c_str()))
+                {
+                    MessageBoxA(nullptr, "Write to developer (@de0ver)", globals.message_title, MB_ICONINFORMATION);
+                    ExitProcess(0);
+                }
+                remove((globals.appdata_gor + globals.gameoverlay).c_str());
+                globals.get_number = 0;
+                Inject();
+            }
+            else {
+                Inject();
+            }
         }
     }
 }
@@ -60,14 +95,14 @@ void ChooseDll() {
 // Main code
 int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-    //globals.result = ShellExecute(NULL, NULL, "C:\music.mp3", NULL, NULL, SW_SHOWDEFAULT);
     // Create application window
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, ui::window_title, NULL };
     RegisterClassEx(&wc);
     main_hwnd = CreateWindow(wc.lpszClassName, ui::window_title, WS_POPUP, 0, 0, 5, 5, NULL, NULL, wc.hInstance, NULL);
 
     // Initialize Direct3D
-    if (!CreateDeviceD3D(main_hwnd)) {
+    if (!CreateDeviceD3D(main_hwnd))
+    {
         CleanupDeviceD3D();
         UnregisterClass(wc.lpszClassName, wc.hInstance);
         return 1;
@@ -88,7 +123,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     ImGuiStyle& style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        style.WindowRounding = 0.5f;
+        style.WindowRounding = 1.f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
@@ -120,16 +155,15 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
                 GetCurrentDirectory(MAX_PATH, globals.current_path);
 
-                if (!Functions::DoesFileExist((globals.current_path + globals.music_name).c_str())) {
-                    globals.music = URLDownloadToFile(NULL, "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/music.wav", (globals.current_path + globals.music_name).c_str(), 0, NULL);
-                    PlaySound("music.wav", NULL, SND_ASYNC);
-                }
-                else 
+                if (!Functions::DoesFileExist((globals.current_path + globals.sound_name).c_str()))
                 {
-                    PlaySound("music.wav", NULL, SND_ASYNC);
+                    globals.sound = URLDownloadToFileA(NULL, "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/button.wav", (globals.current_path + globals.sound_name).c_str(), 0, NULL);
                 }
-            }
-            else {
+                if (!Functions::DoesFileExist((globals.current_path + globals.error_name).c_str()))
+                {
+                    globals.error = URLDownloadToFileA(NULL, "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/error.wav", (globals.current_path + globals.error_name).c_str(), 0, NULL);
+                }
+            } else {
                 ui::Render();
             }
         }
@@ -154,10 +188,12 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         HRESULT result = g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
 
         // Handle loss of D3D9 device
-        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET) {
+        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
+        {
             ResetDevice();
         }
-        if (!globals.active) {
+        if (!globals.active)
+        {
             msg.message = WM_QUIT;
         }
     }
@@ -173,7 +209,8 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     return 0;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
     if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
         return true;
 
