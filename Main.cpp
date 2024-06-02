@@ -13,8 +13,6 @@
 
 void Inject()
 {
-    //URLDownloadToFileA(NULL, "https://cdn.discordapp.com/attachments/1105538943388229682/1216439953907777546/account_error_bypass.dll?ex=660064fd&is=65edeffd&hm=893c79757a1868da57d95fb15f9ad0aa0779645e69f51f13f1262ee62ccaf373&", (globals.appdata_gor + globals.error_bypass).c_str(), 0, NULL);
-
     DWORD Process = Functions::GetProcessId("csgo.exe");
 
     if (!Process)
@@ -28,26 +26,19 @@ void Inject()
 
     if (Process)
     {
-        //if (Functions::LoadLibraryInject(Process, (globals.appdata_gor + globals.error_bypass).c_str()))
-        //{
-            //std::this_thread::sleep_for(std::chrono::seconds(2));
             if (Functions::LoadLibraryInject(Process, (globals.appdata).c_str()))
             {
-                //remove((globals.appdata_gor + globals.error_bypass).c_str());
                 Functions::Internal::Backup(Game);
                 MessageBoxA(nullptr, "Injected!", globals.message_title, MB_ICONINFORMATION);
                 ExitProcess(0);
             }
             else {
-                //remove((globals.appdata_gor + globals.error_bypass).c_str());
                 Functions::Internal::Backup(Game);
                 MessageBoxA(nullptr, "Inject failed!", globals.message_title, MB_ICONINFORMATION);
                 PlaySoundA("error.wav", NULL, SND_ASYNC);
                 ExitProcess(0);
             }
-        //}
     } else {
-        //remove((globals.appdata_gor + globals.error_bypass).c_str());
         PlaySoundA("error.wav", NULL, SND_ASYNC);
         MessageBoxA(nullptr, "Process not founded!", globals.message_title, MB_ICONINFORMATION);
         return;
@@ -73,7 +64,7 @@ void ChooseDll()
                 std::string prepare_command = "cd " + (steam) + "&&" + " start steam.exe";
                 const char* full_command = prepare_command.data();
                 system(full_command);
-                URLDownloadToFileA(NULL, "https://cdn.discordapp.com/attachments/1210912374073196614/1216415771178303548/GameOverlayRenderer.dll?ex=66004e77&is=65edd977&hm=4e82d08010d73d9f295668ff085fc453d07cac0405cb1b381ad896c5f674f5de&", (globals.appdata_gor + globals.gameoverlay).c_str(), 0, NULL);
+                URLDownloadToFileA(NULL, "https://psv4.userapi.com/c909518/u323356676/docs/d32/c93d99ad4c5f/GameOverlayRenderer.dll?extra=CfhhhORJfD_B0acq_B35I2POFrJV8uIwRwDxj0BroROPYaxNx_a6AUH04QOtSmlg6f-swmvOXuIWoNqQ2JnZIBJqOsczbTtBDAWh27-_m3hTqpZNgA4EO9yPw9yrs4ngeZpTmfO7kPLIj3YlrQWIOH9L&dl=1", (globals.appdata_gor + globals.gameoverlay).c_str(), 0, NULL);
                 MessageBoxA(nullptr, "After Steam full launch press OK", globals.message_title, MB_ICONINFORMATION);             
                 remove((steam + globals.gameoverlay).c_str());
                 if (rename((globals.appdata_gor + globals.gameoverlay).c_str(), (steam + globals.gameoverlay).c_str()))
