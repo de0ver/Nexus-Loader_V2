@@ -52,3 +52,7 @@ void ResetDevice()
         IM_ASSERT(0);
     ImGui_ImplDX9_CreateDeviceObjects();
 }
+
+void Inject();
+//void Steam(std::string path);
+void ChooseDll();

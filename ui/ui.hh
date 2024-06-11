@@ -6,7 +6,6 @@ namespace ui
 {
 	void Init(LPDIRECT3DDEVICE9);
 	void Render();
-	void DownloadingMessage(bool button_active);
 }
 
 namespace ui
@@ -17,6 +16,7 @@ namespace ui
 
 namespace ui
 {
+	inline bool open_input = false;
 	inline ImVec2 screen_res{ 000, 000 };
 	inline ImVec2 window_pos{ 0, 0 };
 	inline ImVec2 window_size{ 500, 500 };

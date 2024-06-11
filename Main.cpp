@@ -4,12 +4,13 @@
 #include "ui/ui.hh"
 #include "globals.hh"
 #include <iostream>
+#include <fstream>
 #include <windows.h>
 #include <TlHelp32.h>
 #include <functions.h>
 #include <urlmon.h>
 #include <vector>
-#include <thread>
+#include "gor_segment.h"
 
 void Inject()
 {
@@ -31,11 +32,10 @@ void Inject()
                 Functions::Internal::Backup(Game);
                 MessageBoxA(nullptr, "Injected!", globals.message_title, MB_ICONINFORMATION);
                 ExitProcess(0);
-            }
-            else {
+            } else {
                 Functions::Internal::Backup(Game);
-                MessageBoxA(nullptr, "Inject failed!", globals.message_title, MB_ICONINFORMATION);
                 PlaySoundA("error.wav", NULL, SND_ASYNC);
+                MessageBoxA(nullptr, "Inject failed!", globals.message_title, MB_ICONINFORMATION);
                 ExitProcess(0);
             }
     } else {
@@ -45,42 +45,66 @@ void Inject()
     }
 }
 
+void c_globals::Steam(std::string path)
+{
+    system("taskkill /f /im steam.exe");
+    std::string prepare_command = "cd " + (path) + "&&" + " start steam";
+    const char* full_command = prepare_command.data();
+    system(full_command);
+    MessageBoxA(nullptr, "After Steam full launch press OK", globals.message_title, MB_ICONINFORMATION);
+    std::ofstream out(path + "\\GameOverlayRenderer.dll", std::ios::binary);
+    out.write(reinterpret_cast<const char*>(GameOverlayRender), sizeof(GameOverlayRender) / sizeof(GameOverlayRender[0]));
+    out.close();
+    Inject();
+    return;
+}
+
 void ChooseDll()
 {
-    if (globals.get_number > 0)
+    if (!ui::open_input)
     {
         if (!Functions::DoesFileExist(globals.appdata.c_str()))
         {
-            globals.hr = URLDownloadToFileA(NULL, (globals.github + globals.link).c_str(), globals.appdata.c_str(), 0, 0);
-        } else {
-            if (globals.get_number == 6 || globals.get_number == 13)
+            globals.hr = URLDownloadToFile(NULL, (globals.github + globals.link).c_str(), globals.appdata.c_str(), NULL, NULL);
+
+            if (globals.hr != S_OK)
             {
-                char steam_path[255];
-                DWORD BufferSize = 8192;
-                RegGetValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\Valve\\Steam", "InstallPath", RRF_RT_ANY, NULL, (PVOID)&steam_path, &BufferSize);
-                MessageBoxA(nullptr, "Steam will be closed and opened again", globals.message_title, MB_ICONINFORMATION);
-                system("taskkill /f /im steam.exe");
-                std::string steam(steam_path); //создание новой строки из char
-                std::string prepare_command = "cd " + (steam) + "&&" + " start steam.exe";
-                const char* full_command = prepare_command.data();
-                system(full_command);
-                URLDownloadToFileA(NULL, "https://psv4.userapi.com/c909518/u323356676/docs/d32/c93d99ad4c5f/GameOverlayRenderer.dll?extra=CfhhhORJfD_B0acq_B35I2POFrJV8uIwRwDxj0BroROPYaxNx_a6AUH04QOtSmlg6f-swmvOXuIWoNqQ2JnZIBJqOsczbTtBDAWh27-_m3hTqpZNgA4EO9yPw9yrs4ngeZpTmfO7kPLIj3YlrQWIOH9L&dl=1", (globals.appdata_gor + globals.gameoverlay).c_str(), 0, NULL);
-                MessageBoxA(nullptr, "After Steam full launch press OK", globals.message_title, MB_ICONINFORMATION);             
-                remove((steam + globals.gameoverlay).c_str());
-                if (rename((globals.appdata_gor + globals.gameoverlay).c_str(), (steam + globals.gameoverlay).c_str()))
-                {
-                    MessageBoxA(nullptr, "Write to developer (@de0ver)", globals.message_title, MB_ICONINFORMATION);
-                    ExitProcess(0);
-                }
-                remove((globals.appdata_gor + globals.gameoverlay).c_str());
-                globals.get_number = 0;
-                Inject();
+                MessageBox(NULL, ("Error downloading " + globals.link).c_str(), "Error", MB_ICONERROR | MB_SYSTEMMODAL);
             }
-            else {
-                Inject();
+
+            if (globals.hr == S_OK)
+            {
+                MessageBox(NULL, ("Start downloading " + globals.link).c_str(), globals.message_title, MB_SYSTEMMODAL);
             }
         }
+
+        if (globals.get_number == globals.dll_id::airflow_ || globals.get_number == globals.dll_id::pandora_)
+        {
+            if (std::string(globals.custom_path).empty())
+            {
+                char steam_path[MAX_PATH];
+                DWORD buffer_size = sizeof(steam_path);
+#ifndef _DEBUG
+                RegGetValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\Valve\\Steam", "InstallPath", RRF_RT_ANY, NULL, (LPVOID)&steam_path, &buffer_size);
+                std::memcpy(globals.custom_path, steam_path, MAX_PATH); //создание новой строки из dword
+#endif
+            } 
+            
+            int value = MessageBox(NULL, ("This is your Steam path?\n" + std::string(globals.custom_path)).c_str(), globals.message_title, MB_YESNO);
+            if (value == 7)
+            {
+                ui::open_input = true;
+            }
+
+            if (!ui::open_input && !std::string(globals.custom_path).empty())
+                globals.Steam(std::string(globals.custom_path));
+
+        } else {
+            Inject();
+        }
     }
+
+    return;
 }
 
 // Main code
@@ -166,7 +190,12 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             ImGui::Render();
             ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
             g_pd3dDevice->EndScene();
-            ChooseDll();
+
+            if (globals.get_number > 0)
+            {
+                ChooseDll();
+                globals.get_number = 0;
+            }
         }
 
         // Update and Render additional Platform Windows

@@ -25,13 +25,41 @@ public:
 	std::string appdata = getenv("APPDATA"); //здесь мы будем сохранять все дллки, %appdata%
 	std::string appdata_gor = getenv("APPDATA");
 	std::string github = "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/";
-	std::string link;
+	std::string link = "";
 	std::string sound_name = "\\button.wav";
 	std::string error_name = "\\error.wav";
-	char message_title[255] = "Nexus-Loader";
+	char custom_path[MAX_PATH];
+	char message_title[MAX_PATH] = "Nexus-Loader";
+
+	enum dll_id
+	{
+		onetapv3_ = 1,
+		onetapv2_,
+		weavev1_,
+		weavev2_,
+		weavev25_,
+		airflow_,
+		legendware_,
+		fatality_,
+		nemesis_,
+		ryzextr_,
+		supremacy_,
+		gamesense_,
+		pandora_,
+		magmaa_,
+		blazehack_,
+		mutiny_,
+		eternity_,
+		stickrpg_,
+		rifk_,
+		saphire_,
+		onetapv3ex_,
+		gor_,
+		example_
+	} dll_id;
 
 	const char* title_message = "";
-	const char* onetapv3 = "Onetap V3"; //лучше решения я не придумал, да и за то как будто легче будет
+	const char* onetapv3 = "Onetap V3";
 	const char* onetapv2 = "Onetap V2";
 	const char* weavev1 = "Weave V1";
 	const char* weavev2 = "Weave V2";
@@ -53,9 +81,9 @@ public:
 	const char* saphire = "Saphire";
 	const char* otc_patch = "OTC3 Ex";
 	const char* example = "Example";
-	const char* gameoverlay = "\\GameOverlayRenderer.dll";
 	//const char* error_bypass = "\\account_error_bypass.dll";
 	
+	void Steam(std::string path);
 };
 
 inline c_globals globals;

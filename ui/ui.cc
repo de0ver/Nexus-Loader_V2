@@ -44,7 +44,7 @@ void ui::Render()
          //первый ряд
         if (ImGui::Button(globals.onetapv3, ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 1;
+            globals.get_number = globals.dll_id::onetapv3_;
             globals.link = "onetapv3.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -52,7 +52,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.onetapv2), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 2;
+            globals.get_number = globals.dll_id::onetapv2_;
             globals.link = "onetapv2.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -60,7 +60,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.weavev1), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 3;
+            globals.get_number = globals.dll_id::weavev1_;
             globals.link = "weavev1.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -68,7 +68,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.weavev2), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 4;
+            globals.get_number = globals.dll_id::weavev2_;
             globals.link = "weavev2.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -77,7 +77,7 @@ void ui::Render()
         ImGui::NewLine(); //второй ряд
         if (ImGui::Button((globals.weavev25), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 5;
+            globals.get_number = globals.dll_id::weavev25_;
             globals.link = "weavev25.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -86,7 +86,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.airflow), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 6;
+            globals.get_number = globals.dll_id::airflow_;
             globals.link = "airflow.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -94,7 +94,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.legendware), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 7;
+            globals.get_number = globals.dll_id::legendware_;
             globals.link = "legendware.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -102,7 +102,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.fatality), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 8;
+            globals.get_number = globals.dll_id::fatality_;
             globals.link = "fatality.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -110,7 +110,7 @@ void ui::Render()
         ImGui::NewLine(); //третий ряд
         if (ImGui::Button((globals.nemesis), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 9;
+            globals.get_number = globals.dll_id::nemesis_;
             globals.link = "nemesis.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -118,7 +118,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.ryzextr), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 10;
+            globals.get_number = globals.dll_id::ryzextr_;
             globals.link = "ryzextr.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -126,7 +126,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.supremacy), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 11;
+            globals.get_number = globals.dll_id::supremacy_;
             globals.link = "supremacy.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -134,7 +134,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.gamesense), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 12;
+            globals.get_number = globals.dll_id::gamesense_;
             globals.link = "gamesense.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -142,7 +142,7 @@ void ui::Render()
         ImGui::NewLine(); //четвертый ряд
         if (ImGui::Button((globals.pandora), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 13;
+            globals.get_number = globals.dll_id::pandora_;
             globals.link = "pandora.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -150,7 +150,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.magmaa), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 14;
+            globals.get_number = globals.dll_id::magmaa_;
             globals.link = "magmaa.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -158,7 +158,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.blazehack), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 15;
+            globals.get_number = globals.dll_id::blazehack_;
             globals.link = "blazehack.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -166,7 +166,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.mutiny), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 16;
+            globals.get_number = globals.dll_id::mutiny_;
             globals.link = "mutiny.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -174,7 +174,7 @@ void ui::Render()
         ImGui::NewLine(); //четвертый ряд
         if (ImGui::Button((globals.eternity), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 17;
+            globals.get_number = globals.dll_id::eternity_;
             globals.link = "eternity.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -182,7 +182,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.stickrpg), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 18;
+            globals.get_number = globals.dll_id::stickrpg_;
             globals.link = "stickrpg.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -190,7 +190,7 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.rifk), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 19;
+            globals.get_number = globals.dll_id::rifk_;
             globals.link = "rifk.dll";
             globals.appdata += ("\\" + globals.link);
         }
@@ -198,68 +198,39 @@ void ui::Render()
         ImGui::SameLine();
         if (ImGui::Button((globals.saphire), ImVec2(globals.button_width, globals.button_height)))
         {
-            globals.get_number = 20;
+            globals.get_number = globals.dll_id::saphire_;
             globals.link = "saphire.dll";
             globals.appdata += ("\\" + globals.link);
         }
+    }
 
-        //ImGui::NewLine(); //пятый ряд
-        //if (ImGui::Button((globals.otc_patch), ImVec2(globals.button_width, globals.button_height)))
-        //{
-        //    globals.get_number = 21;
-        //    globals.link = "eternity.dll";
-        //    globals.appdata += ("\\" + globals.link);
-        //}
-
-        //ImGui::SameLine();
-        //if (ImGui::Button((globals.example), ImVec2(globals.button_width, globals.button_height)))
-        //{
-        //    globals.get_number = 22;
-        //    globals.link = "saphire.dll";
-        //    globals.appdata += ("\\" + globals.link);
-        //}
-
-        //ImGui::SameLine();
-        //if (ImGui::Button((globals.example), ImVec2(globals.button_width, globals.button_height)))
-        //{
-        //    globals.get_number = 23;
-        //    globals.link = "saphire.dll";
-        //    globals.appdata += ("\\" + globals.link);
-        //}
-
-        //ImGui::SameLine();
-        //if (ImGui::Button((globals.example), ImVec2(globals.button_width, globals.button_height)))
-        //{
-        //    globals.get_number = 24;
-        //    globals.link = "saphire.dll";
-        //    globals.appdata += ("\\" + globals.link);
-        //}
-
-        if (globals.get_number > 0)
+    if (ui::open_input)
+    {
+        DWORD flags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+        ImGui::SetNextWindowSize(ImVec2(250.0f, 0.0f));
+        ImGui::OpenPopup("Input");
+        if (ImGui::BeginPopupModal("Input", &ui::open_input, flags))
         {
-            globals.button_active = true;
-            ui::DownloadingMessage(globals.button_active);
+            ImGui::Text("Input path to Steam: ");
+            ImGui::InputText("##path", globals.custom_path, sizeof(globals.custom_path));
+            if (ImGui::Button("Done"))
+            {
+                ui::open_input = false;
+                ImGui::CloseCurrentPopup();
+                globals.Steam(globals.custom_path);
+            }
+
+            ImGui::EndPopup();
         }
     }
-    ImGui::End();
-}
 
-void ui::DownloadingMessage(bool button_active)
-{
-    if (button_active)
-    {
-        button_active = false;
-        PlaySoundA("button.wav", NULL, SND_ASYNC);
-        MessageBoxA(nullptr, "Downloading...", globals.message_title, MB_ICONINFORMATION);
-        return;
-    }
+    ImGui::End();
 }
 
 void ui::Init(LPDIRECT3DDEVICE9 device)
 {
     dev = device;
 	
-    // colors
     ImGui::StyleColorsLight();
 
 	if (window_pos.x == 0) {
@@ -267,6 +238,5 @@ void ui::Init(LPDIRECT3DDEVICE9 device)
 		GetWindowRect(GetDesktopWindow(), &screen_rect);
 		screen_res = ImVec2(float(screen_rect.right), float(screen_rect.bottom));
 		window_pos = (screen_res - window_size) * 0.5f;
-		// init images here
 	}
 }
