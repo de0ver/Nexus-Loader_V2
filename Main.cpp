@@ -18,7 +18,7 @@ void Inject()
 
     if (!Process)
     {
-        MessageBoxA(nullptr, "Open CS:GO and press OK!", "Nexus-Loader", MB_ICONINFORMATION);
+        MessageBox(nullptr, "EN: Open CS:GO and press OK!\nRU: Запусти CS:GO и нажми OK", globals.message_title, MB_ICONINFORMATION);
         Process = Functions::GetProcessId("csgo.exe");
     }
 
@@ -30,32 +30,47 @@ void Inject()
             if (Functions::LoadLibraryInject(Process, (globals.appdata).c_str()))
             {
                 Functions::Internal::Backup(Game);
-                MessageBoxA(nullptr, "Injected!", globals.message_title, MB_ICONINFORMATION);
+                MessageBox(nullptr, "EN: Injected!\nRU: Модуль загружен!", globals.message_title, MB_ICONINFORMATION);
                 ExitProcess(0);
             } else {
                 Functions::Internal::Backup(Game);
-                PlaySoundA("error.wav", NULL, SND_ASYNC);
-                MessageBoxA(nullptr, "Inject failed!", globals.message_title, MB_ICONINFORMATION);
+                PlaySound("error.wav", NULL, SND_ASYNC);
+                MessageBox(nullptr, "EN: Inject failed!\nRU: Не удалось загрузить модуль!", globals.message_title, MB_ICONINFORMATION);
                 ExitProcess(0);
             }
     } else {
         PlaySoundA("error.wav", NULL, SND_ASYNC);
-        MessageBoxA(nullptr, "Process not founded!", globals.message_title, MB_ICONINFORMATION);
+        MessageBox(nullptr, "EN: Process csgo.exe not founded!\nRU: Процесс csgo.exe не найден!", globals.message_title, MB_ICONINFORMATION);
         return;
     }
 }
 
 void c_globals::Steam(std::string path)
 {
-    system("taskkill /f /im steam.exe");
-    std::string prepare_command = "cd " + (path) + "&&" + " start steam";
-    const char* full_command = prepare_command.data();
-    system(full_command);
-    MessageBoxA(nullptr, "After Steam full launch press OK", globals.message_title, MB_ICONINFORMATION);
+    if (MessageBox(nullptr, "EN: You launched any thing through Steam?\nRU: Ты запускал что нибудь через Steam?", globals.message_title, MB_YESNO) == IDYES)
+    {
+        system("taskkill /f /im steam.exe");
+        std::string prepare_command = "cd " + (path) + "&&" + " start steam.exe";
+        const char* full_command = prepare_command.data();
+        system(full_command);
+
+        Sleep(500); //trash
+        DWORD Process = Functions::GetProcessId("steam.exe");
+
+        if (!Process)
+        {
+            MessageBox(nullptr, "EN: Steam not started automatically, start it manual\nRU: Steam не запустился автоматически, сделай это сам", globals.message_title, MB_ICONINFORMATION);
+        }
+
+        MessageBox(nullptr, "EN: After Steam full launch press OK\nRU: После полного запуска Steam нажми ОК", globals.message_title, MB_ICONINFORMATION);
+    }
+    
     std::ofstream out(path + "\\GameOverlayRenderer.dll", std::ios::binary);
     out.write(reinterpret_cast<const char*>(GameOverlayRender), sizeof(GameOverlayRender) / sizeof(GameOverlayRender[0]));
     out.close();
+
     Inject();
+
     return;
 }
 
@@ -69,12 +84,12 @@ void ChooseDll()
 
             if (globals.hr != S_OK)
             {
-                MessageBox(NULL, ("Error downloading " + globals.link).c_str(), "Error", MB_ICONERROR | MB_SYSTEMMODAL);
+                MessageBox(NULL, ("EN: Error downloading " + globals.link + "\nRU: Ошибка во время скачивания " + globals.link).c_str(), "Error", MB_ICONERROR | MB_SYSTEMMODAL);
             }
 
             if (globals.hr == S_OK)
             {
-                MessageBox(NULL, ("Start downloading " + globals.link).c_str(), globals.message_title, MB_SYSTEMMODAL);
+                MessageBox(NULL, ("EN: Start downloading " + globals.link + "\nRU: Начало загрузки модуля " + globals.link).c_str(), globals.message_title, MB_SYSTEMMODAL);
             }
         }
 
@@ -90,7 +105,7 @@ void ChooseDll()
 #endif
             } 
             
-            int value = MessageBox(NULL, ("This is your Steam path?\n" + std::string(globals.custom_path)).c_str(), globals.message_title, MB_YESNO);
+            int value = MessageBox(NULL, ("EN: This is your Steam path?\n" + std::string(globals.custom_path) + "\nRU: Это правильный путь до Steam?\n" + std::string(globals.custom_path)).c_str(), globals.message_title, MB_YESNO);
             if (value == 7)
             {
                 ui::open_input = true;
@@ -172,11 +187,11 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
                 if (!Functions::DoesFileExist((globals.current_path + globals.sound_name).c_str()))
                 {
-                    globals.sound = URLDownloadToFileA(NULL, "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/button.wav", (globals.current_path + globals.sound_name).c_str(), 0, NULL);
+                    globals.sound = URLDownloadToFile(NULL, "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/button.wav", (globals.current_path + globals.sound_name).c_str(), 0, NULL);
                 }
                 if (!Functions::DoesFileExist((globals.current_path + globals.error_name).c_str()))
                 {
-                    globals.error = URLDownloadToFileA(NULL, "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/error.wav", (globals.current_path + globals.error_name).c_str(), 0, NULL);
+                    globals.error = URLDownloadToFile(NULL, "https://raw.githubusercontent.com/de0ver/For-NexusLoader/main/error.wav", (globals.current_path + globals.error_name).c_str(), 0, NULL);
                 }
             } else {
                 ui::Render();

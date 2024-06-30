@@ -211,7 +211,7 @@ void ui::Render()
         ImGui::OpenPopup("Input");
         if (ImGui::BeginPopupModal("Input", &ui::open_input, flags))
         {
-            ImGui::Text("Input path to Steam: ");
+            ImGui::Text(u8"EN: Input path to Steam: ");
             ImGui::InputText("##path", globals.custom_path, sizeof(globals.custom_path));
             if (ImGui::Button("Done"))
             {
